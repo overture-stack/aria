@@ -18,10 +18,9 @@
 
 package bio.overture.aria.model;
 
+import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Setter
 @NoArgsConstructor

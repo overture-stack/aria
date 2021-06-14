@@ -18,11 +18,11 @@
 
 package bio.overture.aria.exceptions;
 
+import static java.lang.String.format;
+
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-
-import static java.lang.String.format;
 
 @Value
 @EqualsAndHashCode(callSuper = true)

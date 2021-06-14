@@ -19,28 +19,110 @@
 package bio.overture.aria.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Analysis {
-    private static final String PUBLISED_STATE = "PUBLISHED";
+  private static final String PUBLISHED_STATE = "PUBLISHED";
 
-    String analysisId;
-    String studyId;
-    String analysisState;
-    List<AnalysisFile> files;
+  private String analysisId;
+  private String studyId;
+  private AnalysisState analysisState;
+  private AnalysisType analysisType;
+  private List<Sample> samples;
+  private List<AnalysisFile> files;
 
-    public Boolean isPublished() {
-        return analysisState.equalsIgnoreCase(PUBLISED_STATE);
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
+
+  private LocalDateTime firstPublishedAt;
+  private LocalDateTime publishedAt;
+
+  private SortedSet<AnalysisStateChange> analysisStateHistory;
+
+  private Map<String, Object> data;
+
+  public Boolean isPublished() {
+    return analysisState.equals(AnalysisState.PUBLISHED);
+  }
+
+  public Boolean hasFiles() {
+    return files.size() > 0;
+  }
+
+  public enum AnalysisState {
+    PUBLISHED,
+    UNPUBLISHED,
+    SUPPRESSED;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class AnalysisType {
+    @NotNull private String name;
+    @Positive private Integer version;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class Sample {
+    private String sampleId;
+    private String specimenId;
+    private String submitterSampleId;
+    private String sampleType;
+    private String matchedNormalSubmitterSampleId;
+    private Specimen specimen;
+    private Donor donor;
+    private Map<String, Object> info;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class Specimen {
+    private String specimenId;
+    private String donorId;
+    private String submitterSpecimenId;
+    private String tumourNormalDesignation;
+    private String specimenTissueSource;
+    private String specimenType;
+    private Map<String, Object> info;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class Donor {
+    private String donorId;
+    private String studyId;
+    private String submitterDonorId;
+    private String gender;
+    private Map<String, Object> info;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class AnalysisStateChange implements Comparable<AnalysisStateChange> {
+    private String initialState;
+    private String updatedState;
+    private LocalDateTime updatedAt;
+    private Map<String, Object> data;
+
+    @Override
+    public int compareTo(AnalysisStateChange o) {
+      return this.getUpdatedAt().compareTo(o.getUpdatedAt());
     }
-
-    public Boolean hasFiles() {
-        return files.size() > 0;
-    }
-
+  }
 }

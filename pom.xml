@@ -15,6 +15,7 @@
     <description>A Reactive SONG/SCORE API</description>
     <properties>
         <java.version>11</java.version>
+        <javax.validation.version>2.0.1.Final</javax.validation.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,6 +42,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
         </dependency>
     </dependencies>
 
