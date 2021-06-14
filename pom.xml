@@ -8,11 +8,41 @@
         <version>2.5.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>bio.overture</groupId>
     <artifactId>aria</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aria</name>
+
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>A Reactive SONG/SCORE API</description>
+
+    <licenses>
+        <license>
+            <name>AGPL-3.0</name>
+            <url>https://raw.githubusercontent.com/overture-stack/aria/main/LICENSE</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Jaser Uddin</name>
+            <email>jaser.Uddin@oicr.on.ca</email>
+            <organization>OICR</organization>
+            <organizationUrl>https://oicr.on.ca/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Alexandru Lepsa</name>
+            <email>lepsalex@gmail.com</email>
+            <organization>OICR</organization>
+            <organizationUrl>https://oicr.on.ca/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/overture-stack/aria.git</connection>
+        <developerConnection>scm:git:ssh://github.com:overture-stack/aria.git</developerConnection>
+        <url>https://github.com/overture-stack/aria/tree/master</url>
+    </scm>
+
     <properties>
         <java.version>11</java.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
@@ -53,6 +83,13 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>com.coveo</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
                 <version>2.9</version>
@@ -66,5 +103,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>dcc-release</id>
+            <name>artifacts.oicr.on.ca-releases</name>
+            <url>https://artifacts.oicr.on.ca/artifactory/dcc-release</url>
+        </repository>
+    </repositories>
 
 </project>
