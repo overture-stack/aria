@@ -40,7 +40,7 @@
     <scm>
         <connection>scm:git:git://github.com/overture-stack/aria.git</connection>
         <developerConnection>scm:git:ssh://github.com:overture-stack/aria.git</developerConnection>
-        <url>https://github.com/overture-stack/aria/tree/master</url>
+        <url>https://github.com/overture-stack/aria/tree/main</url>
     </scm>
 
     <properties>
@@ -104,12 +104,17 @@
         </plugins>
     </build>
 
-    <repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>dcc-snapshot</id>
+            <name>artifacts.oicr.on.ca-snapshots</name>
+            <url>https://artifacts.oicr.on.ca/artifactory/dcc-snapshot</url>
+        </snapshotRepository>
         <repository>
             <id>dcc-release</id>
             <name>artifacts.oicr.on.ca-releases</name>
             <url>https://artifacts.oicr.on.ca/artifactory/dcc-release</url>
         </repository>
-    </repositories>
+    </distributionManagement>
 
 </project>
