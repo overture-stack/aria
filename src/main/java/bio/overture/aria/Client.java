@@ -109,13 +109,6 @@ public class Client {
     log.info("scoreRootUrl - " + scoreRootUrl);
   }
 
-  public Client(@NonNull WebClient songClient, @NonNull WebClient scoreClient) {
-    this.songClient = songClient;
-    this.scoreClient = scoreClient;
-    this.clientsRetrySpec = Retry.backoff(2, Duration.ofSeconds(5));
-    log.info("Initialized song score client.");
-  }
-
   public Mono<Analysis> getAnalysis(String studyId, UUID analysisId) {
     return songClient
         .get()
