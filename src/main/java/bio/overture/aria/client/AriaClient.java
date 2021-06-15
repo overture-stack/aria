@@ -16,7 +16,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package bio.overture.aria;
+package bio.overture.aria.client;
 
 import static java.lang.String.format;
 
@@ -27,17 +27,16 @@ import bio.overture.aria.model.LegacyFileEntity;
 import bio.overture.aria.model.ScoreFileSpec;
 import bio.overture.aria.model.response.ServerErrorResponse;
 import bio.overture.aria.model.response.SubmitResponse;
+import bio.overture.aria.properties.AriaClientProperties;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -61,23 +60,35 @@ import reactor.util.retry.RetryBackoffSpec;
 
 @Slf4j
 @Component
-public class Client {
-  final RetryBackoffSpec clientsRetrySpec;
-  final WebClient songClient;
-  final WebClient scoreClient;
+public class AriaClient {
+
+  private final RetryBackoffSpec clientsRetrySpec;
+  private final WebClient songClient;
+  private final WebClient scoreClient;
 
   private static final String RESOURCE_ID_HEADER = "X-Resource-ID";
   private static final String OUATH_RESOURCE_ID = "songScoreOauth";
 
   @Autowired
-  public Client(
-      @Value("${aria.client.songRootUrl}") String songRootUrl,
-      @Value("${aria.client.scoreRootUrl}") String scoreRootUrl,
-      @Value("${aria.client.clientId}") String clientId,
-      @Value("${aria.client.clientSecret}") String clientSecret,
-      @Value("${aria.client.tokenUrl}") String tokenUrl,
-      @Value("${aria.client.retryMaxAttempts}") Integer retryMaxAttempts,
-      @Value("${aria.client.retryDelaySec}") Integer retryDelaySec) {
+  public AriaClient(AriaClientProperties properties) {
+    this(
+        properties.getSongRootUrl(),
+        properties.getScoreRootUrl(),
+        properties.getClientId(),
+        properties.getClientSecret(),
+        properties.getTokenUrl(),
+        properties.getRetryMaxAttempts(),
+        properties.getRetryDelaySec());
+  }
+
+  public AriaClient(
+      String songRootUrl,
+      String scoreRootUrl,
+      String clientId,
+      String clientSecret,
+      String tokenUrl,
+      Integer retryMaxAttempts,
+      Integer retryDelaySec) {
 
     val oauthFilter = createOauthFilter(OUATH_RESOURCE_ID, tokenUrl, clientId, clientSecret);
 
