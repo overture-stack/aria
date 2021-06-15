@@ -12,10 +12,10 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: maven
+  - name: jdk
     command: ['cat']
     tty: true
-    image: maven:3.6.3-openjdk-11
+    image: adoptopenjdk/openjdk11:jdk-11.0.6_10-alpine-slim
 """
         }
     }
@@ -32,7 +32,7 @@ spec:
         }
         stage('Test') {
             steps {
-                container('maven') {
+                container('jdk') {
                     sh "./mvnw test"
                 }
             }
@@ -45,7 +45,7 @@ spec:
                 }
             }
             steps {
-                container('maven') {
+                container('jdk') {
                     configFileProvider(
                         [configFile(fileId: '01ae7759-03a9-47c0-9db6-925aebb50ae1', variable: 'MAVEN_SETTINGS')]) {
                         sh './mvnw -s $MAVEN_SETTINGS clean package deploy'
