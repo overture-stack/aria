@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-bio.overture.aria.autoconfigure.ClientAutoConfiguration
+bio.overture.aria.autoconfigure.AriaClientAutoConfiguration

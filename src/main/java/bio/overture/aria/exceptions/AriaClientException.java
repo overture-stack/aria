@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class ClientException extends Throwable {
+public class AriaClientException extends Throwable {
   HttpStatus status;
   String message;
 

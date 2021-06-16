@@ -20,7 +20,7 @@ package bio.overture.aria.client;
 
 import static java.lang.String.format;
 
-import bio.overture.aria.exceptions.ClientException;
+import bio.overture.aria.exceptions.AriaClientException;
 import bio.overture.aria.model.Analysis;
 import bio.overture.aria.model.AnalysisFile;
 import bio.overture.aria.model.LegacyFileEntity;
@@ -111,8 +111,8 @@ public class AriaClient {
             // Retry on non 5xx errors, 4xx is bad request no point retrying
             .filter(
                 t ->
-                    t instanceof ClientException
-                        && ((ClientException) t).getStatus().is5xxServerError())
+                    t instanceof AriaClientException
+                        && ((AriaClientException) t).getStatus().is5xxServerError())
             .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
 
     log.info("Initialized song score client.");
@@ -266,7 +266,7 @@ public class AriaClient {
         return clientResponse
             .bodyToMono(ServerErrorResponse.class)
             .flux()
-            .flatMap(res -> Mono.error(new ClientException(status, res.getMessage())));
+            .flatMap(res -> Mono.error(new AriaClientException(status, res.getMessage())));
       } else if (clientResponse.statusCode().is5xxServerError()) {
         // 5xx errors return as octet-stream
         return clientResponse
@@ -275,7 +275,7 @@ public class AriaClient {
             .flatMap(
                 res ->
                     Mono.error(
-                        new ClientException(
+                        new AriaClientException(
                             clientResponse.statusCode(), "SongScore - Internal Server Error")));
       }
 
@@ -291,7 +291,8 @@ public class AriaClient {
             .bodyToMono(ServerErrorResponse.class)
             .flatMap(
                 res ->
-                    Mono.error(new ClientException(clientResponse.statusCode(), res.getMessage())));
+                    Mono.error(
+                        new AriaClientException(clientResponse.statusCode(), res.getMessage())));
       } else if (clientResponse.statusCode().is5xxServerError()) {
         // 5xx errors return as octet-stream
         return clientResponse
@@ -300,7 +301,7 @@ public class AriaClient {
                 res -> {
                   log.error("SongScoreServer 5xx response: {}", res);
                   return Mono.error(
-                      new ClientException(
+                      new AriaClientException(
                           clientResponse.statusCode(), "SongScore - Internal Server Error"));
                 });
       }
